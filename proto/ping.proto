@@ -4,10 +4,10 @@ option go_package = "github.com/rmanzoku/grpc-boilerplate/feature/ping";
 import "google/api/annotations.proto";
 
 service PingService {
-    rpc Ping(MessageInput) returns (MessageOutput) {
+    rpc Echo(MessageInput) returns (MessageOutput) {
 	option (google.api.http) = {
 				    post: "/ping/echo",
-				    body: "msg"
+				    body: "*"
 	};
     }
 }
