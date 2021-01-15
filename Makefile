@@ -10,7 +10,6 @@ protoc: proto/*.proto
 	cd proto; \
 	for n in $(subst .proto, , $(notdir $^)); do \
 		docker run -u $(UID) --rm -v `pwd`:/defs namely/protoc-all:$(PROTOC_ALL_VER) -f $$n.proto -o gen/pb-go/$$n -l go --with-gateway --with-openapi-json-names; \
-		mv gen/pb-go/$$n/$$n.swagger.json gen/pb-web/$$n; \
 		mkdir -p ../$(FEATURE)/$$n; \
 		mkdir -p ../$(SERVICE)/$$n; \
 		touch ../$(SERVICE)/$$n/service.go; \

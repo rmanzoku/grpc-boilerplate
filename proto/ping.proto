@@ -1,12 +1,12 @@
 syntax = "proto3";
 package ping;
-option go_package = "github.com/doublejumptokyo/rmanzoku/grpc-boilerplate/feature/ping";
+option go_package = "github.com/rmanzoku/grpc-boilerplate/feature/ping";
 import "google/api/annotations.proto";
 
 service PingService {
     rpc Ping(MessageInput) returns (MessageOutput) {
 	option (google.api.http) = {
-				    post: "/ping"
+				    post: "/ping",
 				    body: "msg"
 	};
     }
