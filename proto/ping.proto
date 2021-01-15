@@ -1,0 +1,23 @@
+syntax = "proto3";
+package ping;
+option go_package = "github.com/doublejumptokyo/rmanzoku/grpc-boilerplate/feature/ping";
+import "google/api/annotations.proto";
+
+service PingService {
+    rpc Ping(MessageInput) returns (MessageOutput) {
+	option (google.api.http) = {
+				    post: "/ping"
+				    body: "msg"
+	};
+    }
+}
+
+message MessageInput {
+    string msg = 1;
+}
+
+message MessageOutput {
+    string msg = 1;
+}
+
+
