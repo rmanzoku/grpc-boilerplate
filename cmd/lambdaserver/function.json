@@ -1,0 +1,13 @@
+{
+  "Description": "",
+  "FunctionName": "rmanzokuTest",
+  "Handler": "lambdaserver",
+  "MemorySize": 512,
+  "Role": "arn:aws:iam::655301543014:role/service-role/rmanzokuTest-role-53i9eb9a",
+  "Runtime": "go1.x",
+  "Tags": {},
+  "Timeout": 15,
+  "TracingConfig": {
+    "Mode": "PassThrough"
+  }
+}

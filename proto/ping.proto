@@ -6,7 +6,7 @@ import "google/api/annotations.proto";
 service PingService {
     rpc Ping(MessageInput) returns (MessageOutput) {
 	option (google.api.http) = {
-				    post: "/ping",
+				    post: "/ping/echo",
 				    body: "msg"
 	};
     }

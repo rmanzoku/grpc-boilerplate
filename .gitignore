@@ -1,3 +1,5 @@
+cmd/lambdaserver/lambdaserver
+
 # Binaries for programs and plugins
 *.exe
 *.exe~
