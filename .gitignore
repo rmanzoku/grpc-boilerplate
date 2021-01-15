@@ -1,4 +1,5 @@
 cmd/lambdaserver/lambdaserver
+cmd/lambdagrpcweb/lambdagrpcweb
 
 # Binaries for programs and plugins
 *.exe
