@@ -4,7 +4,7 @@ go 1.15
 
 require (
 	github.com/aws/aws-lambda-go v1.22.0
-	github.com/awslabs/aws-lambda-go-api-proxy v0.9.0
+	github.com/awslabs/aws-lambda-go-api-proxy v0.11.0
 	github.com/desertbit/timer v0.0.0-20180107155436-c41aec40b27f // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.2
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.1.0

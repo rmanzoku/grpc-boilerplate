@@ -6,7 +6,7 @@ import (
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/awslabs/aws-lambda-go-api-proxy/httpadapter"
+	"github.com/awslabs/aws-lambda-go-api-proxy/handlerfunc"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpc_logger "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
 	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
@@ -20,7 +20,7 @@ import (
 	"google.golang.org/grpc"
 )
 
-var adapter *httpadapter.HandlerAdapter
+var adapter *handlerfunc.HandlerFuncAdapterV2
 
 func registerServices(s *grpc.Server) {
 	ping.RegisterPingServiceServer(s, &ping_service.PingServiceServer{})
@@ -59,10 +59,10 @@ func init() {
 	}
 
 	// Lambda adapter
-	adapter = httpadapter.New(httpServer.Handler)
+	adapter = handlerfunc.NewV2(httpServer.Handler.ServeHTTP)
 }
 
-func Handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+func Handler(ctx context.Context, req events.APIGatewayV2HTTPRequest) (events.APIGatewayV2HTTPResponse, error) {
 	return adapter.ProxyWithContext(ctx, req)
 }
 
