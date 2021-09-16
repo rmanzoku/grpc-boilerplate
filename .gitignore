@@ -1,5 +1,5 @@
-cmd/lambdaserver/lambdaserver
-cmd/lambdagrpcweb/lambdagrpcweb
+handler
+.envrc
 
 # Binaries for programs and plugins
 *.exe
