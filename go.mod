@@ -10,7 +10,7 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.1.0
 	github.com/improbable-eng/grpc-web v0.13.1-0.20210105121553-b608386bfb82
 	github.com/mwitkow/go-conntrack v0.0.0-20190716064945-2f068394615f // indirect
-	github.com/rs/cors v1.7.0 // indirect
+	github.com/rs/cors v1.7.0
 	go.uber.org/zap v1.16.0
 	golang.org/x/net v0.0.0-20200822124328-c89045814202
 	google.golang.org/genproto v0.0.0-20210106152847-07624b53cd92
@@ -18,3 +18,5 @@ require (
 	google.golang.org/protobuf v1.25.0
 	nhooyr.io/websocket v1.8.6 // indirect
 )
+
+replace github.com/awslabs/aws-lambda-go-api-proxy => ../aws-lambda-go-api-proxy
