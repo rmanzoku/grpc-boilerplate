@@ -1,7 +1,12 @@
 {
   "Description": "",
+  "Environment": {
+    "Variables": {
+      "HELLO": "WORLD"
+    }
+  },
   "FunctionName": "rmanzokuTest",
-  "Handler": "lambdagrpcweb",
+  "Handler": "handler",
   "MemorySize": 512,
   "Role": "arn:aws:iam::655301543014:role/service-role/rmanzokuTest-role-53i9eb9a",
   "Runtime": "go1.x",

@@ -14,6 +14,7 @@ import (
 	"github.com/improbable-eng/grpc-web/go/grpcweb"
 	"github.com/rmanzoku/grpc-boilerplate/feature/ping"
 	ping_service "github.com/rmanzoku/grpc-boilerplate/service/ping"
+	"github.com/rs/cors"
 	"go.uber.org/zap"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
@@ -47,13 +48,18 @@ func init() {
 	// Wrapping http2 for standalone
 	httpServer := &http.Server{
 		Handler: h2c.NewHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			grpcWebServer.ServeHTTP(w, r)
+			if grpcWebServer.IsGrpcWebRequest(r) {
+				grpcWebServer.ServeHTTP(w, r)
+			}
 
-			// for cors preflight
-			// grpcweb package use https://github.com/rs/cors/blob/master/cors.go#L202
-			// cors package doesn't exec WriteHeader, it is needed lambda proxy
+			// CORSを通すおまじない
 			if grpcWebServer.IsAcceptableGrpcCorsRequest(r) {
-				w.WriteHeader(http.StatusNoContent)
+				cors.New(cors.Options{
+					AllowOriginFunc:  func(origin string) bool { return true },
+					AllowedMethods:   []string{"POST", "OPTIONS"},
+					AllowedHeaders:   []string{"*"},
+					AllowCredentials: true,
+				}).ServeHTTP(w, r, nil)
 			}
 		}), &http2.Server{}),
 	}
