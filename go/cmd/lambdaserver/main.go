@@ -10,8 +10,8 @@ import (
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/awslabs/aws-lambda-go-api-proxy/httpadapter"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	"github.com/rmanzoku/grpc-boilerplate/feature/ping"
-	ping_service "github.com/rmanzoku/grpc-boilerplate/service/ping"
+	"github.com/rmanzoku/grpc-boilerplate/go/feature/ping"
+	ping_service "github.com/rmanzoku/grpc-boilerplate/go/service/ping"
 )
 
 var adapter *httpadapter.HandlerAdapter

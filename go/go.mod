@@ -1,4 +1,4 @@
-module github.com/rmanzoku/grpc-boilerplate
+module github.com/rmanzoku/grpc-boilerplate/go
 
 go 1.15
 
@@ -18,5 +18,3 @@ require (
 	google.golang.org/protobuf v1.25.0
 	nhooyr.io/websocket v1.8.6 // indirect
 )
-
-replace github.com/awslabs/aws-lambda-go-api-proxy => ../aws-lambda-go-api-proxy
