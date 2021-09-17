@@ -1,7 +1,7 @@
 PROTOC_ALL_VER := 1.34_0
 PKG=github.com/rmanzoku/grpc-boilerplate
-FEATURE=feature
-SERVICE=service
+FEATURE=go/feature
+SERVICE=go/service
 UID := $(shell id -u)
 
 .PHONY: protoc

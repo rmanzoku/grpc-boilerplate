@@ -1,23 +1,36 @@
 syntax = "proto3";
 package ping;
-option go_package = "github.com/rmanzoku/grpc-boilerplate/feature/ping";
 import "google/api/annotations.proto";
 
+option go_package = "github.com/rmanzoku/grpc-boilerplate/go/feature/ping";
+
 service PingService {
-    rpc Echo(MessageInput) returns (MessageOutput) {
-	option (google.api.http) = {
+  rpc Echo(MessageInput) returns (MessageOutput) {
+    option (google.api.http) = {
 				    post: "/ping/echo",
 				    body: "*"
 	};
-    }
+  }
+  rpc Now(Empty) returns (Time) {
+    option (google.api.http) = {
+				    get: "/ping/now"
+	};
+  }
 }
 
 message MessageInput {
-    string msg = 1;
+  string msg = 1;
 }
 
 message MessageOutput {
-    string msg = 1;
+  string msg = 1;
+}
+
+message Time {
+  uint64 t = 1;
+}  
+
+message Empty {
 }
 
 
