@@ -8,13 +8,13 @@ import (
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/awslabs/aws-lambda-go-api-proxy/httpadapter"
+	"github.com/awslabs/aws-lambda-go-api-proxy/handlerfunc"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/rmanzoku/grpc-boilerplate/go/feature/ping"
 	ping_service "github.com/rmanzoku/grpc-boilerplate/go/service/ping"
 )
 
-var adapter *httpadapter.HandlerAdapter
+var adapter *handlerfunc.HandlerFuncAdapterV2
 
 func registerServices(mux *runtime.ServeMux) (err error) {
 	ctx := context.Background()
@@ -31,7 +31,7 @@ func init() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	adapter = httpadapter.New(accessLogMiddleware(mux))
+	adapter = handlerfunc.NewV2(accessLogMiddleware(mux).ServeHTTP)
 }
 
 func accessLogMiddleware(h http.Handler) http.Handler {
@@ -43,7 +43,7 @@ func accessLogMiddleware(h http.Handler) http.Handler {
 	})
 }
 
-func Handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+func Handler(ctx context.Context, req events.APIGatewayV2HTTPRequest) (events.APIGatewayV2HTTPResponse, error) {
 	return adapter.ProxyWithContext(ctx, req)
 }
 
