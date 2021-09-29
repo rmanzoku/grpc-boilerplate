@@ -7,11 +7,16 @@ declare global {
       proto: any
     }
   }
+  interface Window {
+    proto: any
+  }
 }
 
 if (!process.browser) {
   global.XMLHttpRequest = require('xhr2')
   global.proto = {}
+} else {
+  window.proto = {}
 }
 
 function MyApp({ Component, pageProps }: AppProps) {
