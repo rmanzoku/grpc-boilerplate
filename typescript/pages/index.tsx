@@ -2,16 +2,12 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from 'styles/Home.module.css'
-import { Empty } from 'assets/protobuf/web/ping_pb'
-import { PingServiceClient } from 'assets/protobuf/web/PingServiceClientPb'
-
-const hostname = "https://test-api.dev.snm.djty.co/"
-
-const client = new PingServiceClient(hostname, {}, { withCredentials: true })
+import { GetNow } from 'fetcher/ping'
 
 const Page: NextPage = () => {
 
 
+  GetNow().then((t) => { console.log(t) }).catch((e) => { console.error(e) })
   // const req = new Empty()
   // client.now(req, {}).then((res) => {
   //   console.log(res.getT())

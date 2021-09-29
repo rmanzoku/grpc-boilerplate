@@ -12,7 +12,6 @@ declare global {
 if (!process.browser) {
   global.XMLHttpRequest = require('xhr2')
   global.proto = {}
-  console.log("proto")
 }
 
 function MyApp({ Component, pageProps }: AppProps) {
