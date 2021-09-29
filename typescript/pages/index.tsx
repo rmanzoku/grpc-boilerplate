@@ -1,9 +1,24 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import styles from 'styles/Home.module.css'
+import { Empty } from 'assets/protobuf/web/ping_pb'
+import { PingServiceClient } from 'assets/protobuf/web/PingServiceClientPb'
 
-const Home: NextPage = () => {
+const hostname = "https://test-api.dev.snm.djty.co/"
+
+const client = new PingServiceClient(hostname, {}, { withCredentials: true })
+
+const Page: NextPage = () => {
+
+
+  // const req = new Empty()
+  // client.now(req, {}).then((res) => {
+  //   console.log(res.getT())
+  // }).catch((e) => {
+  //   console.error(e)
+  // })
+
   return (
     <div className={styles.container}>
       <Head>
@@ -69,4 +84,4 @@ const Home: NextPage = () => {
   )
 }
 
-export default Home
+export default Page
