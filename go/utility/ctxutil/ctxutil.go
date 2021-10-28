@@ -9,6 +9,7 @@ type key int
 
 const (
 	timeKey key = iota
+	datastoreKey
 )
 
 func Setup(ctx context.Context) context.Context {

@@ -6,6 +6,7 @@ require (
 	github.com/aws/aws-lambda-go v1.22.0
 	github.com/awslabs/aws-lambda-go-api-proxy v0.11.0
 	github.com/desertbit/timer v0.0.0-20180107155436-c41aec40b27f // indirect
+	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.2
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.1.0
 	github.com/improbable-eng/grpc-web v0.13.1-0.20210105121553-b608386bfb82
