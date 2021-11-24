@@ -4,6 +4,9 @@ go 1.15
 
 require (
 	github.com/aws/aws-lambda-go v1.22.0
+	github.com/aws/aws-sdk-go-v2 v1.11.1
+	github.com/aws/aws-sdk-go-v2/config v1.10.2
+	github.com/aws/aws-sdk-go-v2/service/secretsmanager v1.10.1
 	github.com/awslabs/aws-lambda-go-api-proxy v0.11.0
 	github.com/desertbit/timer v0.0.0-20180107155436-c41aec40b27f // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
