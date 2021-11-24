@@ -115,5 +115,85 @@ export class PingServiceClient {
     this.methodInfoNow);
   }
 
+  methodInfoDBSelect = new grpcWeb.AbstractClientBase.MethodInfo(
+    ping_pb.MessageOutput,
+    (request: ping_pb.Empty) => {
+      return request.serializeBinary();
+    },
+    ping_pb.MessageOutput.deserializeBinary
+  );
+
+  dBSelect(
+    request: ping_pb.Empty,
+    metadata: grpcWeb.Metadata | null): Promise<ping_pb.MessageOutput>;
+
+  dBSelect(
+    request: ping_pb.Empty,
+    metadata: grpcWeb.Metadata | null,
+    callback: (err: grpcWeb.Error,
+               response: ping_pb.MessageOutput) => void): grpcWeb.ClientReadableStream<ping_pb.MessageOutput>;
+
+  dBSelect(
+    request: ping_pb.Empty,
+    metadata: grpcWeb.Metadata | null,
+    callback?: (err: grpcWeb.Error,
+               response: ping_pb.MessageOutput) => void) {
+    if (callback !== undefined) {
+      return this.client_.rpcCall(
+        this.hostname_ +
+          '/ping.PingService/DBSelect',
+        request,
+        metadata || {},
+        this.methodInfoDBSelect,
+        callback);
+    }
+    return this.client_.unaryCall(
+    this.hostname_ +
+      '/ping.PingService/DBSelect',
+    request,
+    metadata || {},
+    this.methodInfoDBSelect);
+  }
+
+  methodInfoKMSSign = new grpcWeb.AbstractClientBase.MethodInfo(
+    ping_pb.MessageOutput,
+    (request: ping_pb.MessageInput) => {
+      return request.serializeBinary();
+    },
+    ping_pb.MessageOutput.deserializeBinary
+  );
+
+  kMSSign(
+    request: ping_pb.MessageInput,
+    metadata: grpcWeb.Metadata | null): Promise<ping_pb.MessageOutput>;
+
+  kMSSign(
+    request: ping_pb.MessageInput,
+    metadata: grpcWeb.Metadata | null,
+    callback: (err: grpcWeb.Error,
+               response: ping_pb.MessageOutput) => void): grpcWeb.ClientReadableStream<ping_pb.MessageOutput>;
+
+  kMSSign(
+    request: ping_pb.MessageInput,
+    metadata: grpcWeb.Metadata | null,
+    callback?: (err: grpcWeb.Error,
+               response: ping_pb.MessageOutput) => void) {
+    if (callback !== undefined) {
+      return this.client_.rpcCall(
+        this.hostname_ +
+          '/ping.PingService/KMSSign',
+        request,
+        metadata || {},
+        this.methodInfoKMSSign,
+        callback);
+    }
+    return this.client_.unaryCall(
+    this.hostname_ +
+      '/ping.PingService/KMSSign',
+    request,
+    metadata || {},
+    this.methodInfoKMSSign);
+  }
+
 }
 

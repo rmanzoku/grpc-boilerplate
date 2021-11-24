@@ -64,6 +64,58 @@
           "PingService"
         ]
       }
+    },
+    "/ping/select": {
+      "get": {
+        "operationId": "PingService_DBSelect",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pingMessageOutput"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "PingService"
+        ]
+      }
+    },
+    "/ping/sign": {
+      "get": {
+        "operationId": "PingService_KMSSign",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pingMessageOutput"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "msg",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "PingService"
+        ]
+      }
     }
   },
   "definitions": {

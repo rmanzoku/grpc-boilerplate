@@ -16,6 +16,16 @@ service PingService {
 				    get: "/ping/now"
 	};
   }
+  rpc DBSelect(Empty) returns (MessageOutput) {
+    option (google.api.http) = {
+				    get: "/ping/select"
+	};
+  }
+  rpc KMSSign(MessageInput) returns (MessageOutput) {
+    option (google.api.http) = {
+				    get: "/ping/sign"
+	};
+  }
 }
 
 message MessageInput {
