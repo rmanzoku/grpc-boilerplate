@@ -13,8 +13,8 @@ func UnaryServerContextInterceptor() grpc.UnaryServerInterceptor {
 		ctx = ctxutil.Setup(ctx)
 		reply, hErr := handler(ctx, req)
 		if hErr != nil {
-			_ = ctxutil.Rollback(ctx)
-			return reply, hErr
+			err := ctxutil.RollbackWithErr(ctx, hErr)
+			return reply, err
 		}
 
 		err := ctxutil.Commit(ctx)
