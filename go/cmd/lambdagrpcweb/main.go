@@ -13,6 +13,7 @@ import (
 	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
 	"github.com/improbable-eng/grpc-web/go/grpcweb"
 	"github.com/rmanzoku/grpc-boilerplate/go/feature/ping"
+	"github.com/rmanzoku/grpc-boilerplate/go/interceptor"
 	ping_service "github.com/rmanzoku/grpc-boilerplate/go/service/ping"
 	"github.com/rs/cors"
 	"go.uber.org/zap"
@@ -35,7 +36,8 @@ func init() {
 	// Base grpc server
 	grpcServer := grpc.NewServer(grpc_middleware.WithUnaryServerChain(
 		grpc_ctxtags.UnaryServerInterceptor(),
-		grpc_logger.UnaryServerInterceptor(logger),
+		interceptor.UnaryServerAccessLogInterceptor(),
+		interceptor.UnaryServerContextInterceptor(),
 		grpc_recovery.UnaryServerInterceptor(),
 	))
 	registerServices(grpcServer)
