@@ -21,7 +21,7 @@ import (
 	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/rmanzoku/grpc-boilerplate/go/feature/ping"
-	interceptor "github.com/rmanzoku/grpc-boilerplate/go/middleware/grpc"
+	"github.com/rmanzoku/grpc-boilerplate/go/interceptor"
 	ping_service "github.com/rmanzoku/grpc-boilerplate/go/service/ping"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
