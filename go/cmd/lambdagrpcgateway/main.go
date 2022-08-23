@@ -29,10 +29,7 @@ import (
 )
 
 const grpcAddress = "127.0.0.1:3003"
-const grpcGwAddress = "127.0.0.1:3004"
 
-var grpcServer = &grpc.Server{}
-var grpcGatewayMux = &runtime.ServeMux{}
 var adapter *handlerfunc.HandlerFuncAdapterV2
 
 func registerServices(s *grpc.Server, m *runtime.ServeMux) (err error) {
