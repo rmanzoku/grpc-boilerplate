@@ -1,11 +1,20 @@
 package main
 
+// grpcとgrpc gatewayを同時に起動する
+//
+// |             |    |                                                    |
+// | API Gateway | -> |                    AWS Lambda                      |
+// |             |    | HandlerFuncAdapter -> grpcGatewayMux -> grpcServer |
+//
+
 import (
 	"context"
 	"log"
 	"net"
-	"net/http"
 
+	"github.com/aws/aws-lambda-go/events"
+	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/awslabs/aws-lambda-go-api-proxy/handlerfunc"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpc_logger "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
 	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
@@ -24,6 +33,7 @@ const grpcGwAddress = "127.0.0.1:3004"
 
 var grpcServer = &grpc.Server{}
 var grpcGatewayMux = &runtime.ServeMux{}
+var adapter *handlerfunc.HandlerFuncAdapterV2
 
 func registerServices(s *grpc.Server, m *runtime.ServeMux) (err error) {
 
@@ -32,6 +42,7 @@ func registerServices(s *grpc.Server, m *runtime.ServeMux) (err error) {
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	}
 
+	// Serviceはgrpc serverとgateway向けにRegisterが必要
 	// PingService
 	ping.RegisterPingServiceServer(s, &ping_service.PingServiceServer{})
 	err = ping.RegisterPingServiceHandlerFromEndpoint(ctx, m, grpcAddress, opts)
@@ -48,36 +59,37 @@ func init() {
 	grpc_logger.ReplaceGrpcLoggerV2(logger)
 
 	// Base grpc server
-	grpcServer = grpc.NewServer(grpc_middleware.WithUnaryServerChain(
+	grpcServer := grpc.NewServer(grpc_middleware.WithUnaryServerChain(
 		grpc_ctxtags.UnaryServerInterceptor(),
 		interceptor.UnaryServerAccessLogInterceptor(),
 		//		interceptor.UnaryServerContextInterceptor(),
 		grpc_recovery.UnaryServerInterceptor(),
 	))
 
-	// Grcp Gateway
-	grpcGatewayMux = runtime.NewServeMux()
-
+	grpcGatewayMux := runtime.NewServeMux()
 	err := registerServices(grpcServer, grpcGatewayMux)
 	if err != nil {
 		log.Fatal(err)
 	}
-}
-
-func main() {
-	GrpcListenPort, err := net.Listen("tcp", grpcAddress)
-	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
-	}
 
 	go func() {
-		err = grpcServer.Serve(GrpcListenPort)
+		grpcListenPort, err := net.Listen("tcp", grpcAddress)
+		if err != nil {
+			log.Fatalf("failed to listen: %v", err)
+		}
+		err = grpcServer.Serve(grpcListenPort)
 		if err != nil {
 			log.Fatal(err)
 		}
 	}()
 
-	if err := http.ListenAndServe(grpcGwAddress, grpcGatewayMux); err != nil {
-		log.Fatal("err")
-	}
+	adapter = handlerfunc.NewV2(grpcGatewayMux.ServeHTTP)
+}
+
+func Handler(ctx context.Context, req events.APIGatewayV2HTTPRequest) (events.APIGatewayV2HTTPResponse, error) {
+	return adapter.ProxyWithContext(ctx, req)
+}
+
+func main() {
+	lambda.Start(Handler)
 }
