@@ -27,7 +27,7 @@ export class PingServiceClient {
                options?: null | { [index: string]: any; }) {
     if (!options) options = {};
     if (!credentials) credentials = {};
-    options['format'] = 'binary';
+    options['format'] = 'text';
 
     this.client_ = new grpcWeb.GrpcWebClientBase(options);
     this.hostname_ = hostname;
@@ -35,7 +35,10 @@ export class PingServiceClient {
     this.options_ = options;
   }
 
-  methodInfoEcho = new grpcWeb.AbstractClientBase.MethodInfo(
+  methodInfoEcho = new grpcWeb.MethodDescriptor(
+    '/ping.PingService/Echo',
+    grpcWeb.MethodType.UNARY,
+    ping_pb.MessageInput,
     ping_pb.MessageOutput,
     (request: ping_pb.MessageInput) => {
       return request.serializeBinary();
@@ -50,13 +53,13 @@ export class PingServiceClient {
   echo(
     request: ping_pb.MessageInput,
     metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.Error,
+    callback: (err: grpcWeb.RpcError,
                response: ping_pb.MessageOutput) => void): grpcWeb.ClientReadableStream<ping_pb.MessageOutput>;
 
   echo(
     request: ping_pb.MessageInput,
     metadata: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.Error,
+    callback?: (err: grpcWeb.RpcError,
                response: ping_pb.MessageOutput) => void) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
@@ -75,7 +78,10 @@ export class PingServiceClient {
     this.methodInfoEcho);
   }
 
-  methodInfoNow = new grpcWeb.AbstractClientBase.MethodInfo(
+  methodInfoNow = new grpcWeb.MethodDescriptor(
+    '/ping.PingService/Now',
+    grpcWeb.MethodType.UNARY,
+    ping_pb.Empty,
     ping_pb.Time,
     (request: ping_pb.Empty) => {
       return request.serializeBinary();
@@ -90,13 +96,13 @@ export class PingServiceClient {
   now(
     request: ping_pb.Empty,
     metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.Error,
+    callback: (err: grpcWeb.RpcError,
                response: ping_pb.Time) => void): grpcWeb.ClientReadableStream<ping_pb.Time>;
 
   now(
     request: ping_pb.Empty,
     metadata: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.Error,
+    callback?: (err: grpcWeb.RpcError,
                response: ping_pb.Time) => void) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
@@ -115,7 +121,10 @@ export class PingServiceClient {
     this.methodInfoNow);
   }
 
-  methodInfoDBSelect = new grpcWeb.AbstractClientBase.MethodInfo(
+  methodInfoDBSelect = new grpcWeb.MethodDescriptor(
+    '/ping.PingService/DBSelect',
+    grpcWeb.MethodType.UNARY,
+    ping_pb.Empty,
     ping_pb.MessageOutput,
     (request: ping_pb.Empty) => {
       return request.serializeBinary();
@@ -130,13 +139,13 @@ export class PingServiceClient {
   dBSelect(
     request: ping_pb.Empty,
     metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.Error,
+    callback: (err: grpcWeb.RpcError,
                response: ping_pb.MessageOutput) => void): grpcWeb.ClientReadableStream<ping_pb.MessageOutput>;
 
   dBSelect(
     request: ping_pb.Empty,
     metadata: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.Error,
+    callback?: (err: grpcWeb.RpcError,
                response: ping_pb.MessageOutput) => void) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
@@ -155,7 +164,10 @@ export class PingServiceClient {
     this.methodInfoDBSelect);
   }
 
-  methodInfoKMSSign = new grpcWeb.AbstractClientBase.MethodInfo(
+  methodInfoKMSSign = new grpcWeb.MethodDescriptor(
+    '/ping.PingService/KMSSign',
+    grpcWeb.MethodType.UNARY,
+    ping_pb.MessageInput,
     ping_pb.MessageOutput,
     (request: ping_pb.MessageInput) => {
       return request.serializeBinary();
@@ -170,13 +182,13 @@ export class PingServiceClient {
   kMSSign(
     request: ping_pb.MessageInput,
     metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.Error,
+    callback: (err: grpcWeb.RpcError,
                response: ping_pb.MessageOutput) => void): grpcWeb.ClientReadableStream<ping_pb.MessageOutput>;
 
   kMSSign(
     request: ping_pb.MessageInput,
     metadata: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.Error,
+    callback?: (err: grpcWeb.RpcError,
                response: ping_pb.MessageOutput) => void) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
