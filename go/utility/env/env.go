@@ -24,6 +24,13 @@ func Get(key string) string {
 	return GetContext(context.Background(), key)
 }
 
+func GetWithDefault(key, defaultValue string) string {
+	if Exist(key) {
+		return Get(key)
+	}
+	return defaultValue
+}
+
 func GetContext(ctx context.Context, key string) string {
 	if ExistEnvVal(key) {
 		return os.Getenv(key)

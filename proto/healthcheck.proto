@@ -1,0 +1,22 @@
+syntax = "proto3";
+package healthcheck;
+import "google/api/annotations.proto";
+
+option go_package = "github.com/rmanzoku/grpc-boilerplate/go/feature/healthcheck";
+
+service HealthcheckService {
+  rpc Healthcheck(Empty) returns (MessageOutput) {
+    option (google.api.http) = {
+				    get: "/healthcheck"
+  };
+  }
+}
+
+message MessageOutput {
+  string msg = 1;
+}
+
+message Empty {
+}
+
+

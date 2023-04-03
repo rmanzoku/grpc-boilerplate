@@ -12,9 +12,12 @@ import (
 	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/improbable-eng/grpc-web/go/grpcweb"
+	"github.com/rmanzoku/grpc-boilerplate/go/feature/healthcheck"
 	"github.com/rmanzoku/grpc-boilerplate/go/feature/ping"
 	"github.com/rmanzoku/grpc-boilerplate/go/interceptor"
+	healthcheck_service "github.com/rmanzoku/grpc-boilerplate/go/service/healthcheck"
 	ping_service "github.com/rmanzoku/grpc-boilerplate/go/service/ping"
+	"github.com/rmanzoku/grpc-boilerplate/go/utility/env"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 )
@@ -23,21 +26,38 @@ var httpServer = &http.Server{}
 var grpcUnixSocketPath = "/tmp/grpc.sock"
 
 type Handler struct {
-	httpHandler    http.Handler
-	grpcWebHandler *grpcweb.WrappedGrpcServer
+	grpcGatewayRuntime *runtime.ServeMux
+	grpcWebHandler     *grpcweb.WrappedGrpcServer
 }
 
 func (h *Handler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+	// if req.URL.Path == "/" {
+	// 	w.Write([]byte("ok"))
+	// 	return
+	// }
+
 	if h.grpcWebHandler.IsGrpcWebRequest(req) {
 		h.grpcWebHandler.ServeHTTP(w, req)
 		return
 	}
-
-	h.httpHandler.ServeHTTP(w, req)
+	h.grpcGatewayRuntime.ServeHTTP(w, req)
 }
 
-func registerServices(s *grpc.Server) {
+func registerServices(h *Handler, s *grpc.Server) {
+	ctx := context.TODO()
+	var err error
+
 	ping.RegisterPingServiceServer(s, &ping_service.PingServiceServer{})
+	err = ping.RegisterPingServiceHandlerFromEndpoint(ctx, h.grpcGatewayRuntime, "unix:"+grpcUnixSocketPath, []grpc.DialOption{grpc.WithInsecure()})
+	if err != nil {
+		panic(err)
+	}
+
+	healthcheck.RegisterHealthcheckServiceServer(s, &healthcheck_service.HealthcheckServiceServer{})
+	err = healthcheck.RegisterHealthcheckServiceHandlerFromEndpoint(ctx, h.grpcGatewayRuntime, "unix:"+grpcUnixSocketPath, []grpc.DialOption{grpc.WithInsecure()})
+	if err != nil {
+		panic(err)
+	}
 }
 
 func main() {
@@ -52,39 +72,32 @@ func main() {
 		interceptor.UnaryServerContextInterceptor(),
 		grpc_recovery.UnaryServerInterceptor(),
 	))
-	registerServices(grpcServer)
+
+	handler := &Handler{
+		grpcGatewayRuntime: runtime.NewServeMux(),
+		grpcWebHandler:     grpcweb.WrapServer(grpcServer),
+	}
+
+	registerServices(handler, grpcServer)
 
 	go func() {
 		grpcListenPort, err := net.Listen("unix", grpcUnixSocketPath)
 		if err != nil {
 			log.Fatalf("failed to listen: %v", err)
 		}
+		defer grpcListenPort.Close()
+
 		err = grpcServer.Serve(grpcListenPort)
 		if err != nil {
 			log.Fatal(err)
 		}
+
+		defer grpcListenPort.Close()
 	}()
 
-	// Wrapping grpc-web server
-	grpcWebServer := grpcweb.WrapServer(grpcServer)
-	ctx := context.Background()
-	ctx, cancel := context.WithCancel(ctx)
-	defer cancel()
-
-	grpcGateway := runtime.NewServeMux()
-	err := ping.RegisterPingServiceHandlerFromEndpoint(ctx, grpcGateway, "unix:"+grpcUnixSocketPath, []grpc.DialOption{grpc.WithInsecure()})
-	if err != nil {
-		panic(err)
-	}
-
-	handler := &Handler{
-		httpHandler:    grpcGateway,
-		grpcWebHandler: grpcWebServer,
-	}
-
-	httpServer.Addr = "0.0.0.0:8080"
+	httpServer.Addr = "0.0.0.0:" + env.GetWithDefault("PORT", "8080")
 	httpServer.Handler = handler
-	err = httpServer.ListenAndServe()
+	err := httpServer.ListenAndServe()
 	if err != nil {
 		panic(err)
 	}
