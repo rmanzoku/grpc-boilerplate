@@ -14,6 +14,7 @@ const (
 
 func Setup(ctx context.Context) context.Context {
 	ctx = SetTime(ctx, time.Now().Unix())
+	ctx = SetDataStore(ctx)
 	return ctx
 }
 

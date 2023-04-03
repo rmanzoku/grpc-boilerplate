@@ -2,9 +2,9 @@ package ping_service
 
 import (
 	"context"
-	"time"
 
 	"github.com/rmanzoku/grpc-boilerplate/go/feature/ping"
+	"github.com/rmanzoku/grpc-boilerplate/go/utility/ctxutil"
 )
 
 type PingServiceServer struct {
@@ -16,5 +16,6 @@ func (s *PingServiceServer) Echo(ctx context.Context, in *ping.MessageInput) (*p
 }
 
 func (s *PingServiceServer) Now(ctx context.Context, in *ping.Empty) (*ping.Time, error) {
-	return &ping.Time{T: uint64(time.Now().Unix())}, nil
+	now := ctxutil.ExtractTime(ctx)
+	return &ping.Time{T: uint64(now)}, nil
 }
