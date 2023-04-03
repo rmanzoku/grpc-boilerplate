@@ -19,7 +19,6 @@ func registerServices(s *grpc.Server) {
 	ping.RegisterPingServiceServer(s, &ping_service.PingServiceServer{})
 }
 
-//
 func init() {
 }
 
